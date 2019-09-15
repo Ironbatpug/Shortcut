@@ -17,12 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let mountainsVC = storyboard.instantiateViewController(withIdentifier: "mountainsVC") as! MountainVC
-        let spaceVC = storyboard.instantiateViewController(withIdentifier: "spaceVC") as! SpaceVC
-        let oceanVC = storyboard.instantiateViewController(withIdentifier: "oceanVC") as! OceanVC
+        let oceanShortCut = UIMutableApplicationShortcutItem(type: "\(Bundle.main.bundleIdentifier).ocean", localizedTitle: "Ocean", localizedSubtitle: nil, icon: UIApplicationShortcutIcon.init(templateImageName: "OceanShort"), userInfo: nil)
         
-        vcsArray = [mountainsVC, spaceVC, oceanVC]
+        application.shortcutItems = [oceanShortCut]
         
         return true
     }
@@ -36,18 +33,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         if let type = shortcutItem.type.components(separatedBy: ".").last {
             
-            let navVC = window?.rootViewController as! UINavigationController
-            navVC.setViewControllers(vcsArray, animated: false)
+            let tabVC = window?.rootViewController as! UITabBarController
+            tabVC.setViewControllers(vcsArray, animated: false)
             
             switch type {
             case ShortCutType.space.rawValue:
-                navVC.popToViewController(vcsArray[1], animated: true)
+                tabVC.selectedIndex = 1
                 completionHandler(true)
             case ShortCutType.ocean.rawValue:
-                navVC.popToViewController(vcsArray[2], animated: true)
+                tabVC.selectedIndex = 2
                 completionHandler(true)
             default:
-                navVC.popToViewController(vcsArray[0], animated: true)
+                tabVC.selectedIndex = 0
                 completionHandler(true)
             }
         }
