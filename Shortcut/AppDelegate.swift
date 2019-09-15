@@ -51,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 completionHandler(true)
             }
         }
+        completionHandler(false)
     }
 
 
